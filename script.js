@@ -2,30 +2,50 @@ const digitBtns = document.querySelectorAll(".digit");
 const display = document.querySelector(".display");
 const operatorBtns = document.querySelectorAll(".operator");
 const equalsBtn = document.querySelector(".equals");
+const clearBtn = document.querySelector(".clear");
 
 let num1 = "";
 let num2 = "";
 let operator = "";
 
+const resetFunction = (result) => {
+  if (result) {
+    num1 = result;
+  } else {
+    num1 = "";
+  }
+  num2 = "";
+  operator = "";
+};
+
 digitBtns.forEach((digit) => {
   digit.addEventListener("click", () => {
-    /* if (num1 === "" && digit.innerHTML === ".") {
-      display.innerHTML === "0.1";
-    }*/
-    /*TODO: fix so that if the display displays 0 and . is pressed it shows 0.1 */
-    if (operator === "") {
-      num1 += digit.innerHTML;
+    const isNum1 = operator === "";
+    let current = isNum1 ? num1 : num2;
+
+    if (current === "" && digit.innerHTML === ".") {
+      current = "0.";
+    } else {
+      current += digit.innerHTML;
+    }
+
+    if (isNum1) {
+      num1 = current;
       display.innerHTML = num1;
     } else {
-      num2 += digit.innerHTML;
-      display.innerHTML = num1 + " " + operator + " " + num2;
+      num2 = current;
+      display.innerHTML = `${num1} ${operator} ${num2}`;
     }
   });
 });
 
 operatorBtns.forEach((op) => {
   op.addEventListener("click", () => {
-    if (operator !== "") return;
+    if (operator !== "") {
+      const result = operate(operator, Number(num1), Number(num2));
+      display.innerHTML = result;
+      resetFunction(result);
+    }
     operator = op.innerHTML;
     display.innerHTML += " " + operator;
   });
@@ -34,9 +54,12 @@ operatorBtns.forEach((op) => {
 equalsBtn.addEventListener("click", () => {
   const result = operate(operator, Number(num1), Number(num2));
   display.innerHTML = result;
-  num1 = "";
-  num2 = "";
-  operator = "";
+  resetFunction();
+});
+
+clearBtn.addEventListener("click", () => {
+  display.innerHTML = "0";
+  resetFunction();
 });
 
 const add = (num1, num2) => {
