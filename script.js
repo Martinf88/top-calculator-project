@@ -4,6 +4,13 @@ const operatorBtns = document.querySelectorAll(".operator");
 const equalsBtn = document.querySelector(".equals");
 const clearBtn = document.querySelector(".clear");
 
+/* TODO:  Round answers with long decimals to avaoid overflow*/
+/*TODO2: Fix bug whn pressing = before pressing a number or an operator/*
+/*TODO3: Fix bug when num1 has a value and switching operators befor selectging num2 */
+/* TODO 4: Allow only one decimal. Not 2.5.4 only 2.54 */
+/* TODO 5:Add a backspace button */
+/* TODO: 6 Add Keyboard support */
+
 let num1 = "0";
 let num2 = "";
 let operator = "";
