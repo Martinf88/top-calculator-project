@@ -1,0 +1,134 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #676767, #0c0c0c);
+}
+
+.calculator {
+  width: 320px;
+  background-color: #0c0c0c;
+  border-radius: 16px;
+}
+
+.container {
+  background: #676767;
+  padding: 20px;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #f8fafc;
+  margin-bottom: 10px;
+}
+
+/* Display */
+.display-wrapper {
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.sun-cells {
+  background-color: hsla(0, 51%, 20%, 0.3);
+  height: 30px;
+  width: 100px;
+  border-radius: 2px;
+}
+
+.display {
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 2.2rem;
+  text-align: right;
+  padding: 16px;
+  border-radius: 2px;
+  overflow-x: auto;
+}
+
+/* Button grids */
+.digits,
+.operators,
+.others {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.digits {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.operators {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.others {
+  grid-template-columns: 1fr 2fr;
+}
+
+/* Base button styles */
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* Digits */
+.digit,
+.equals {
+  background: #2d2f4a;
+  color: #e5e7eb;
+}
+
+.digit:hover,
+.equals:hover {
+  background: #3a3d63;
+}
+
+/* Operators */
+.operator {
+  background: #f59e0b;
+  color: #1e1e2f;
+  font-weight: bold;
+}
+
+.operator:hover {
+  background: #fbbf24;
+}
+
+/* Clear */
+.clear {
+  background: #ef4444;
+  color: white;
+  font-weight: bold;
+}
+
+.clear:hover {
+  background: #f87171;
+}
+
+/* Equals */
+.equals {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
