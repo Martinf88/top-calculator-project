@@ -12,7 +12,7 @@ const resetFunction = (result) => {
   if (result) {
     num1 = result;
   } else {
-    num1 = "";
+    num1 = "0";
   }
   num2 = "";
   operator = "";
@@ -23,8 +23,10 @@ digitBtns.forEach((digit) => {
     const isNum1 = operator === "";
     let current = isNum1 ? num1 : num2;
 
-    if (current === "" && digit.innerHTML === ".") {
+    if (current === "0" && digit.innerHTML === ".") {
       current = "0.";
+    } else if (current === "0") {
+      current = digit.innerHTML;
     } else {
       current += digit.innerHTML;
     }
