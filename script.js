@@ -4,7 +4,6 @@ const operatorBtns = document.querySelectorAll(".operator");
 const equalsBtn = document.querySelector(".equals");
 const clearBtn = document.querySelector(".clear");
 
-/* TODO:  Round answers with long decimals to avaoid overflow*/
 /*TODO2: Fix bug whn pressing = before pressing a number or an operator/*
 /*TODO3: Fix bug when num1 has a value and switching operators befor selectging num2 */
 /* TODO 4: Allow only one decimal. Not 2.5.4 only 2.54 */
@@ -25,6 +24,19 @@ const resetFunction = (result) => {
   operator = "";
 };
 
+function integerLength(num) {
+  return Math.floor(Math.abs(num)).toString().length;
+}
+
+const MAX_DIGITS = 16;
+const MAX_DECIMALS = 2;
+
+const formatNumber = (num) => {
+  if (!Number.isFinite(num)) return "Not allowed!";
+
+  return Number(num.toFixed(MAX_DECIMALS)).toString();
+};
+
 digitBtns.forEach((digit) => {
   digit.addEventListener("click", () => {
     const isNum1 = operator === "";
@@ -39,9 +51,11 @@ digitBtns.forEach((digit) => {
     }
 
     if (isNum1) {
+      if (num1.length === MAX_DIGITS) return;
       num1 = current;
       display.innerHTML = num1;
     } else {
+      if (num2.length === MAX_DIGITS) return;
       num2 = current;
       display.innerHTML = `${num1} ${operator} ${num2}`;
     }
@@ -61,6 +75,7 @@ operatorBtns.forEach((op) => {
 });
 
 equalsBtn.addEventListener("click", () => {
+  if (num1 === "" || operator === "" || num2 === "") return;
   const result = operate(operator, Number(num1), Number(num2));
   display.innerHTML = result;
   resetFunction();
@@ -91,12 +106,12 @@ const operate = (operator, num1, num2) => {
   if (operator === "") return num1;
 
   if (operator === "+") {
-    return add(num1, num2);
+    return formatNumber(add(num1, num2));
   } else if (operator === "-") {
-    return subtract(num1, num2);
+    return formatNumber(subtract(num1, num2));
   } else if (operator === "*") {
-    return multiply(num1, num2);
+    return formatNumber(multiply(num1, num2));
   } else if (operator === "/") {
-    return divide(num1, num2);
+    return formatNumber(divide(num1, num2));
   }
 };
