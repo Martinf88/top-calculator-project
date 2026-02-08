@@ -34,13 +34,20 @@ const formatNumber = (num) => {
   return Number(num.toFixed(MAX_DECIMALS)).toString();
 };
 
-backSpaceBtn.addEventListener("click", () => {
+const handleBackSpace = () => {
   if (!operator) {
     num1 = num1.length > 1 ? num1.slice(0, -1) : "0";
   } else if (num2) {
     num2 = num2.length > 1 ? num2.slice(0, -1) : "0";
   }
   updateDisplay();
+};
+
+backSpaceBtn.addEventListener("click", () => {
+  handleBackSpace();
+});
+backSpaceBtn.addEventListener("keydown", () => {
+  handleBackSpace();
 });
 
 digitBtns.forEach((btn) => {
