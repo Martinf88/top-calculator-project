@@ -43,19 +43,19 @@ backSpaceBtn.addEventListener("click", () => {
   updateDisplay();
 });
 
-digitBtns.forEach((digit) => {
-  digit.addEventListener("click", () => {
+digitBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
     const isNum1 = operator === "";
     let current = isNum1 ? num1 : num2;
 
-    if (digit.innerHTML === "." && current.includes(".")) return;
+    if (btn.innerHTML === "." && current.includes(".")) return;
 
-    if (current === "0" && digit.innerHTML === ".") {
+    if (current === "0" && btn.innerHTML === ".") {
       current = "0.";
     } else if (current === "0") {
-      current = digit.innerHTML;
+      current = btn.innerHTML;
     } else {
-      current += digit.innerHTML;
+      current += btn.innerHTML;
     }
 
     if (isNum1) {
@@ -71,14 +71,14 @@ digitBtns.forEach((digit) => {
 
 const hasFullOperation = () => operator !== "" && num2 !== "";
 
-operatorBtns.forEach((operatorBtn) => {
-  operatorBtn.addEventListener("click", () => {
+operatorBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
     if (hasFullOperation()) {
       const result = operate(operator, Number(num1), Number(num2));
 
       resetFunction(result);
     }
-    const newOperator = operatorBtn.innerHTML;
+    const newOperator = btn.innerHTML;
     operator = newOperator;
     updateDisplay();
   });
