@@ -4,9 +4,6 @@ const operatorBtns = document.querySelectorAll(".operator");
 const equalsBtn = document.querySelector(".equals");
 const clearBtn = document.querySelector(".clear");
 
-/*TODO2: Fix bug whn pressing = before pressing a number or an operator/*
-/*TODO3: Fix bug when num1 has a value and switching operators befor selectging num2 */
-/* TODO 4: Allow only one decimal. Not 2.5.4 only 2.54 */
 /* TODO 5:Add a backspace button */
 /* TODO: 6 Add Keyboard support */
 
@@ -24,15 +21,11 @@ const resetFunction = (result) => {
   operator = "";
 };
 
-function integerLength(num) {
-  return Math.floor(Math.abs(num)).toString().length;
-}
-
 const MAX_DIGITS = 16;
 const MAX_DECIMALS = 2;
 
 const formatNumber = (num) => {
-  if (!Number.isFinite(num)) return "Not allowed!";
+  if (!Number.isFinite(num)) return "Math says no.";
 
   return Number(num.toFixed(MAX_DECIMALS)).toString();
 };
@@ -41,6 +34,8 @@ digitBtns.forEach((digit) => {
   digit.addEventListener("click", () => {
     const isNum1 = operator === "";
     let current = isNum1 ? num1 : num2;
+
+    if (digit.innerHTML === "." && current.includes(".")) return;
 
     if (current === "0" && digit.innerHTML === ".") {
       current = "0.";
@@ -62,23 +57,26 @@ digitBtns.forEach((digit) => {
   });
 });
 
-operatorBtns.forEach((op) => {
-  op.addEventListener("click", () => {
-    if (operator !== "") {
+const hasFullOperation = () => operator !== "" && num2 !== "";
+
+operatorBtns.forEach((operatorBtn) => {
+  operatorBtn.addEventListener("click", () => {
+    if (hasFullOperation()) {
       const result = operate(operator, Number(num1), Number(num2));
       display.innerHTML = result;
       resetFunction(result);
     }
-    operator = op.innerHTML;
-    display.innerHTML += " " + operator;
+    operator = operatorBtn.innerHTML;
+    display.innerHTML = num1 + " " + operator;
   });
 });
 
 equalsBtn.addEventListener("click", () => {
-  if (num1 === "" || operator === "" || num2 === "") return;
+  if (!hasFullOperation()) return;
+
   const result = operate(operator, Number(num1), Number(num2));
   display.innerHTML = result;
-  resetFunction();
+  resetFunction(result);
 });
 
 clearBtn.addEventListener("click", () => {
@@ -102,16 +100,13 @@ const divide = (num1, num2) => {
   return num1 / num2;
 };
 
-const operate = (operator, num1, num2) => {
-  if (operator === "") return num1;
+const operations = {
+  "+": add,
+  "-": subtract,
+  "*": multiply,
+  "/": divide,
+};
 
-  if (operator === "+") {
-    return formatNumber(add(num1, num2));
-  } else if (operator === "-") {
-    return formatNumber(subtract(num1, num2));
-  } else if (operator === "*") {
-    return formatNumber(multiply(num1, num2));
-  } else if (operator === "/") {
-    return formatNumber(divide(num1, num2));
-  }
+const operate = (operator, num1, num2) => {
+  return formatNumber(operations[operator](num1, num2));
 };
