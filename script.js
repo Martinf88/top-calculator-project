@@ -21,6 +21,10 @@ const resetFunction = (result) => {
   operator = "";
 };
 
+const updateDisplay = () => {
+  display.innerHTML = operator ? `${num1} ${operator} ${num2}` : num1;
+};
+
 const MAX_DIGITS = 16;
 const MAX_DECIMALS = 2;
 
@@ -33,11 +37,10 @@ const formatNumber = (num) => {
 backSpaceBtn.addEventListener("click", () => {
   if (!operator) {
     num1 = num1.length > 1 ? num1.slice(0, -1) : "0";
-    display.innerHTML = num1;
   } else if (num2) {
     num2 = num2.length > 1 ? num2.slice(0, -1) : "0";
-    display.innerHTML = `${num1} ${operator} ${num2}`;
   }
+  updateDisplay();
 });
 
 digitBtns.forEach((digit) => {
@@ -58,12 +61,11 @@ digitBtns.forEach((digit) => {
     if (isNum1) {
       if (num1.length === MAX_DIGITS) return;
       num1 = current;
-      display.innerHTML = num1;
     } else {
       if (num2.length === MAX_DIGITS) return;
       num2 = current;
-      display.innerHTML = `${num1} ${operator} ${num2}`;
     }
+    updateDisplay();
   });
 });
 
@@ -73,11 +75,12 @@ operatorBtns.forEach((operatorBtn) => {
   operatorBtn.addEventListener("click", () => {
     if (hasFullOperation()) {
       const result = operate(operator, Number(num1), Number(num2));
-      display.innerHTML = result;
+
       resetFunction(result);
     }
-    operator = operatorBtn.innerHTML;
-    display.innerHTML = num1 + " " + operator;
+    const newOperator = operatorBtn.innerHTML;
+    operator = newOperator;
+    updateDisplay();
   });
 });
 
@@ -85,13 +88,14 @@ equalsBtn.addEventListener("click", () => {
   if (!hasFullOperation()) return;
 
   const result = operate(operator, Number(num1), Number(num2));
-  display.innerHTML = result;
+
   resetFunction(result);
+  updateDisplay();
 });
 
 clearBtn.addEventListener("click", () => {
-  display.innerHTML = "0";
   resetFunction();
+  updateDisplay();
 });
 
 const add = (num1, num2) => {
