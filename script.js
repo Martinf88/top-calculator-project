@@ -3,8 +3,8 @@ const display = document.querySelector(".display");
 const operatorBtns = document.querySelectorAll(".operator");
 const equalsBtn = document.querySelector(".equals");
 const clearBtn = document.querySelector(".clear");
+const backSpaceBtn = document.querySelector(".back-space");
 
-/* TODO 5:Add a backspace button */
 /* TODO: 6 Add Keyboard support */
 
 let num1 = "0";
@@ -29,6 +29,16 @@ const formatNumber = (num) => {
 
   return Number(num.toFixed(MAX_DECIMALS)).toString();
 };
+
+backSpaceBtn.addEventListener("click", () => {
+  if (!operator) {
+    num1 = num1.length > 1 ? num1.slice(0, -1) : "0";
+    display.innerHTML = num1;
+  } else if (num2) {
+    num2 = num2.length > 1 ? num2.slice(0, -1) : "0";
+    display.innerHTML = `${num1} ${operator} ${num2}`;
+  }
+});
 
 digitBtns.forEach((digit) => {
   digit.addEventListener("click", () => {
