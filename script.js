@@ -42,12 +42,36 @@ const handleBackSpace = () => {
   }
   updateDisplay();
 };
+const handleOperate = () => {
+  if (!hasFullOperation()) return;
+
+  const result = operate(operator, Number(num1), Number(num2));
+
+  resetFunction(result);
+  updateDisplay();
+};
+const handleDelete = () => {
+  resetFunction();
+  updateDisplay();
+};
 
 backSpaceBtn.addEventListener("click", () => {
   handleBackSpace();
 });
-backSpaceBtn.addEventListener("keydown", () => {
-  handleBackSpace();
+document.addEventListener("keydown", (e) => {
+  let key = e.key;
+  if (key === "Enter") {
+    e.preventDefault();
+    handleOperate();
+  }
+  if (key === "Backspace") {
+    e.preventDefault();
+    handleBackSpace();
+  }
+  if (key === "Delete") {
+    e.preventDefault();
+    handleDelete();
+  }
 });
 
 digitBtns.forEach((btn) => {
@@ -92,17 +116,11 @@ operatorBtns.forEach((btn) => {
 });
 
 equalsBtn.addEventListener("click", () => {
-  if (!hasFullOperation()) return;
-
-  const result = operate(operator, Number(num1), Number(num2));
-
-  resetFunction(result);
-  updateDisplay();
+  handleOperate();
 });
 
 clearBtn.addEventListener("click", () => {
-  resetFunction();
-  updateDisplay();
+  handleDelete();
 });
 
 const add = (num1, num2) => {
