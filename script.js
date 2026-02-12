@@ -140,32 +140,43 @@ backSpaceBtn.addEventListener("click", handleBackSpace);
 // Keyboard Support
 document.addEventListener("keydown", (e) => {
   const key = e.key;
-  console.log(e);
 
-  if (key === "Enter") {
+  // Handle digits (0–9)
+  if (/^\d$/.test(key)) {
     e.preventDefault();
-    handleEquals();
+    handleDigits(key);
+    return;
   }
 
-  if (key === "Backspace") {
+  // Handle decimal separator
+  if (key === "." || key === ",") {
     e.preventDefault();
-    handleBackSpace();
+    handleDigits(key);
+    return;
   }
 
-  if (key === "Delete") {
-    e.preventDefault();
-    handleDelete();
-  }
-
+  // Handle operators
   if (["+", "-", "*", "/"].includes(key)) {
     e.preventDefault();
     handleOperatorBtns(key);
+    return;
   }
-  if (
-    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "."].includes(key)
-  ) {
-    e.preventDefault();
-    handleDigits(key);
+
+  switch (key) {
+    case "Enter":
+      e.preventDefault();
+      handleEquals();
+      break;
+
+    case "Backspace":
+      e.preventDefault();
+      handleBackSpace();
+      break;
+
+    case "Delete":
+      e.preventDefault();
+      handleDelete();
+      break;
   }
 });
 
