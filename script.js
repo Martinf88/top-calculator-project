@@ -8,16 +8,13 @@ const clearBtn = document.querySelector(".clear");
 const backSpaceBtn = document.querySelector(".back-space");
 const display = document.querySelector(".display");
 
-/* TODO: After a normal calculation where only the result is displayed
-   and no operator follows, if the user presses a digit, num1 should
-   be replaced with the value of the pressed digit. */
-
 /* ======================
    STATE
 ====================== */
 let num1 = "0";
 let num2 = "";
 let operator = "";
+let hasOperated = false;
 
 /* ======================
    CONFIG
@@ -40,16 +37,18 @@ const updateDisplay = () => {
 };
 
 const resetFunction = (result) => {
-  num1 = result ? result : "0";
+  num1 = result ?? "0";
+
   num2 = "";
   operator = "";
+  hasOperated = true;
 };
 
 /* ======================
    CORE LOGIC HANDLERS
 ====================== */
 const handleCalculate = () => {
-  if (hasFullOperation) {
+  if (hasFullOperation()) {
     const result = operate(operator, Number(num1), Number(num2));
     resetFunction(result);
   }
@@ -60,6 +59,7 @@ const handleBackSpace = () => {
   } else if (num2) {
     num2 = num2.length > 1 ? num2.slice(0, -1) : "0";
   }
+  hasOperated = false;
   updateDisplay();
 };
 
@@ -85,18 +85,26 @@ const handleOperatorBtns = (btn) => {
 };
 
 const handleDigits = (btn) => {
+  const shouldOverwriteValue = hasOperated && operator === "";
   const isNum1 = operator === "";
   let current = isNum1 ? num1 : num2;
   const value = btn === "," ? "." : btn;
 
-  if (value === "." && current.includes(".")) return;
-
-  if (current === "0" && value === ".") {
-    current = "0.";
-  } else if (current === "0") {
-    current = value;
+  if (shouldOverwriteValue) {
+    if (value === ".") {
+      current = "0.";
+    } else {
+      current = value;
+    }
   } else {
-    current += value;
+    if (value === "." && current.includes(".")) return;
+    if (current === "0" && value === ".") {
+      current = "0.";
+    } else if (current === "0") {
+      current = value;
+    } else {
+      current += value;
+    }
   }
 
   if (isNum1) {
@@ -106,7 +114,7 @@ const handleDigits = (btn) => {
     if (current.length > MAX_DIGITS) return;
     num2 = current;
   }
-
+  hasOperated = false;
   updateDisplay();
 };
 
