@@ -80,7 +80,33 @@ const handleOperatorBtns = (btn) => {
     handleCalculate();
   }
 
-  operator = btn.innerHTML;
+  operator = btn;
+  updateDisplay();
+};
+
+const handleDigits = (btn) => {
+  const isNum1 = operator === "";
+  let current = isNum1 ? num1 : num2;
+  const value = btn === "," ? "." : btn;
+
+  if (value === "." && current.includes(".")) return;
+
+  if (current === "0" && value === ".") {
+    current = "0.";
+  } else if (current === "0") {
+    current = value;
+  } else {
+    current += value;
+  }
+
+  if (isNum1) {
+    if (current.length > MAX_DIGITS) return;
+    num1 = current;
+  } else {
+    if (current.length > MAX_DIGITS) return;
+    num2 = current;
+  }
+
   updateDisplay();
 };
 
@@ -91,36 +117,14 @@ const handleOperatorBtns = (btn) => {
 // Digits
 digitBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    const isNum1 = operator === "";
-    let current = isNum1 ? num1 : num2;
-    const value = btn.innerHTML;
-
-    if (value === "." && current.includes(".")) return;
-
-    if (current === "0" && value === ".") {
-      current = "0.";
-    } else if (current === "0") {
-      current = value;
-    } else {
-      current += value;
-    }
-
-    if (isNum1) {
-      if (current.length > MAX_DIGITS) return;
-      num1 = current;
-    } else {
-      if (current.length > MAX_DIGITS) return;
-      num2 = current;
-    }
-
-    updateDisplay();
+    handleDigits(btn.innerHTML);
   });
 });
 
 // Operators
 operatorBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    handleOperatorBtns(btn);
+    handleOperatorBtns(btn.innerHTML);
   });
 });
 
@@ -136,6 +140,7 @@ backSpaceBtn.addEventListener("click", handleBackSpace);
 // Keyboard Support
 document.addEventListener("keydown", (e) => {
   const key = e.key;
+  console.log(e);
 
   if (key === "Enter") {
     e.preventDefault();
@@ -150,6 +155,17 @@ document.addEventListener("keydown", (e) => {
   if (key === "Delete") {
     e.preventDefault();
     handleDelete();
+  }
+
+  if (["+", "-", "*", "/"].includes(key)) {
+    e.preventDefault();
+    handleOperatorBtns(key);
+  }
+  if (
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "."].includes(key)
+  ) {
+    e.preventDefault();
+    handleDigits(key);
   }
 });
 
